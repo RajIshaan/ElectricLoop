@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { supabase } from '@/lib/supabase'
 
 interface User {
   email: string
@@ -20,45 +21,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    // Check localStorage for persisted user (only on client side)
-    if (typeof window !== 'undefined') {
-      const savedUser = localStorage.getItem('electricloop_user')
-      if (savedUser) {
-        try {
-          setUser(JSON.parse(savedUser))
-        } catch (e) {
-          // Invalid JSON, clear it
-          localStorage.removeItem('electricloop_user')
-        }
-      }
+    const init = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const sUser = session?.user
+      setUser(sUser ? { id: sUser.id, email: sUser.email || '' } : null)
     }
+    init()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const sUser = session?.user
+      setUser(sUser ? { id: sUser.id, email: sUser.email || '' } : null)
+    })
+    return () => subscription.unsubscribe()
   }, [])
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    // Mock login - in real app, validate credentials
-    const mockUser = { email, id: Math.random().toString(36).substr(2, 9) }
-    setUser(mockUser)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('electricloop_user', JSON.stringify(mockUser))
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) throw error
     return true
   }
 
   const signup = async (email: string, password: string): Promise<boolean> => {
-    // Mock signup
-    const mockUser = { email, id: Math.random().toString(36).substr(2, 9) }
-    setUser(mockUser)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('electricloop_user', JSON.stringify(mockUser))
+    const { data, error } = await supabase.auth.signUp({ email, password })
+    if (error) throw error
+    const newUser = data.user
+    if (newUser) {
+      // Create profile row matching RLS requirements (owner inserts own id)
+      await supabase.from('profiles').insert({ id: newUser.id, full_name: null, city: null, country: null, interests: [] })
     }
     return true
   }
 
-  const logout = () => {
-    setUser(null)
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('electricloop_user')
-    }
+  const logout = async () => {
+    await supabase.auth.signOut()
   }
 
   return (
