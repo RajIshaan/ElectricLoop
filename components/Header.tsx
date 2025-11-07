@@ -21,11 +21,17 @@ export default function Header() {
             ElectricLoop
           </Link>
           <nav className="flex items-center space-x-6">
+            <Link href="/" className="text-gray-700 hover:text-primary transition-colors text-sm">
+              Home
+            </Link>
             <Link href="/about" className="text-gray-700 hover:text-primary transition-colors text-sm">
               About
             </Link>
             <Link href="/team" className="text-gray-700 hover:text-primary transition-colors text-sm">
               Our Team
+            </Link>
+            <Link href="/contact" className="text-gray-700 hover:text-primary transition-colors text-sm">
+              Contact
             </Link>
             {user ? (
               <>

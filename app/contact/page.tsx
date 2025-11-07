@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Header from '@/components/Header'
 
 export default function Contact() {
+  const bulkRequestFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd5BLjdowuPokJ23O7PF1dUoL8eW5G9rn5nc8jP4YhJH6Tqow/viewform?usp=publish-editor'
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -34,6 +35,32 @@ export default function Contact() {
           </h1>
           <p className="text-xl text-gray-600 text-center">
             Have questions? We'd love to hear from you
+          </p>
+        </div>
+      </section>
+
+      {/* Bulk Purchases */}
+      <section className="py-16 bg-primary/5">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Bulk Purchase Requests</h2>
+          <p className="text-lg text-gray-600 mb-6">
+            Buying components or devices in bulk? Share your requirements and our team will connect you
+            with the right suppliers from our network.
+          </p>
+          <p className="text-sm text-gray-500 mb-6">
+            Use the form below to provide your company details, desired quantities, quality preferences,
+            logistics needs, and timelines. We will review your request and follow up within 24 hours.
+          </p>
+          <a
+            href={bulkRequestFormUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-blue-600 transition-colors"
+          >
+            Open Bulk Request Form
+          </a>
+          <p className="text-xs text-gray-500 mt-3">
+            You can replace this link with your preferred form provider (e.g. Google Forms, Typeform, HubSpot).
           </p>
         </div>
       </section>

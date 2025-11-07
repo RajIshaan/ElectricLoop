@@ -13,11 +13,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Smart E-Waste Marketplace
+              Built For Those Who Move Fast
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Turn your old electronics into value. AI-powered valuation, multiple sales channels, 
-              and sustainable recycling—all in one platform.
+             AI-Powered electronics marketplace built to help all companies find the best electronics
             </p>
             <div className="flex justify-center space-x-4">
               <Link href="/signup">
